@@ -18,6 +18,18 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+html, body {
+  height: 100%;
+  background-color: #fff2d2; /* Set the background color for the entire page */
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
