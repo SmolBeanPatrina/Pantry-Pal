@@ -15,8 +15,10 @@ app.get('/', (req, res) => {
 
 // Route to search recipes
 app.get('/recipes', async (req, res) => {
-    const { includeIngredients, cuisine } = req.query; // Expecting a query parameter like ?query=pasta
-    
+    //const { includeIngredients, cuisine, diet} = req.query; // Expecting a query parameter like ?query=pasta
+    const includeIngredients = 'tomato,cheese';
+    const cuisine = 'italian';
+    const diet = 'pescaterian';
 
     try {
         const response = await axios.get('https://api.spoonacular.com/recipes/complexSearch', {
@@ -24,11 +26,13 @@ app.get('/recipes', async (req, res) => {
                 apiKey: process.env.SPOONACULAR_API_KEY,
                 includeIngredients, // List of ingredients
                 cuisine,            // Cuisine preference
+                diet,               // Diet preference
+                includeIngredients : true
 
             },
         });
 
-        // res.send(response.data);
+        res.send(response.data);
         res.json(response.data); // Send the API response back to the client
     } catch (error) {
         console.error('Error fetching data from Spoonacular:', error.message);
