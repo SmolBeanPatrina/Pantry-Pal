@@ -14,8 +14,7 @@ const LoginForm = ({ onClose }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:3000/api/login", {
+      const response = await fetch("http://localhost:4000/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,10 +29,6 @@ const LoginForm = ({ onClose }) => {
       } else {
         alert("Invalid username or password.");
       }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("An error occurred. Please try again.");
-    }
   };
 
   return (

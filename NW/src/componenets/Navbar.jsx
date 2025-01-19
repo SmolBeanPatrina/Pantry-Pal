@@ -10,6 +10,7 @@ const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showSignupForm, setShowSignupForm] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(false);
+  const [user, setUser] = useState(null); // User state to track login status
 
   useEffect(() => {
     if (showMobileMenu || showSignupForm || showLoginForm) {
@@ -21,6 +22,11 @@ const Navbar = () => {
       document.body.style.overflow = "auto";
     };
   }, [showMobileMenu, showSignupForm, showLoginForm]);
+
+  const handleSignout = () => {
+    setUser(null); // Clear user state on signout
+    alert("Signed out successfully.");
+  };
 
   return (
     <div>
