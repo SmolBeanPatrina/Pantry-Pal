@@ -67,24 +67,25 @@ const RecipePage = () => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
             <Navbar />
+            <button
+                onClick={getRecipes}
+                className="mt-16 bg-red-500 text-white px-4 py-2 rounded-full"
+            >
+                Generate Recipes
+            </button>
             <div className="w-full max-w-4xl px-4">
-            <TableOfContents sections={sections} />
+            <TableOfContents sections={recipesData.recipes} />
             <main>
-                {sections.map((section) => (
+                {recipesData.recipes.map((section) => (
                 <Section
                     key={section.id}
                     id={section.id}
                     title={section.title}
-                    content={section.content}
+                    content={section.summary}
                 />
                 ))}
             </main>
-            <button
-                style={{ padding: "10px 15px", cursor: "pointer" }}
-                onClick={getRecipes}
-            >
-                Generate Recipes
-            </button>
+            
             </div>
         </div>
     );
