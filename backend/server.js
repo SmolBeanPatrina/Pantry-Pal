@@ -123,19 +123,39 @@ app.get('/recipes', async (req, res) => {
     try {
         // Fetch details for each recipe ID
         const recipeDetailsPromises = recipeIds.map(id =>
-            axios.get(`https://api.spoonacular.com/recipes/${id}/information`, {
-                params: { apiKey: process.env.SPOONACULAR_API_KEY }
-            })
-        );
+          axios.get(`https://api.spoonacular.com/recipes/${id}/information`, {
+              params: { apiKey: process.env.SPOONACULAR_API_KEY }
+          })
+      );
 
-        const recipeDetailsResponses = await Promise.all(recipeDetailsPromises);
-        const recipes = recipeDetailsResponses.map(response => response.data);
+      const recipeDetailsResponses = await Promise.all(recipeDetailsPromises);
 
-        res.json({ recipes });
-    } catch (error) {
-        console.error('Error fetching recipe details:', error.message);
-        res.status(500).json({ error: 'An error occurred while fetching recipe details' });
-    }
+      // Process the fetched recipe details
+      const recipes = recipeDetailsResponses.map(response => {
+          const recipe = response.data;
+
+          // Decode and clean up the summary or description
+          const cleanDescription = recipe.summary
+              ? he.decode(recipe.summary.replace(/<\/?[^>]+(>|$)/g, ''))
+              : 'No description available.';
+
+          return {
+              id: recipe.id,
+              title: recipe.title,
+              description: cleanDescription,
+              instructions: recipe.instructions || 'No instructions provided.',
+              readyInMinutes: recipe.readyInMinutes,
+              servings: recipe.servings,
+              image: recipe.image,
+              sourceUrl: recipe.sourceUrl,
+          };
+      });
+
+      res.json({ recipes });
+  } catch (error) {
+      console.error('Error fetching recipe details:', error.message);
+      res.status(500).json({ error: 'An error occurred while fetching recipe details' });
+  }
 });
 
 // Start the Server
