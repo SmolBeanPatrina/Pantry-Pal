@@ -14,7 +14,7 @@ dotenv.config();
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 5000;
-const mongoURI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/pantrypal";
+const mongoURI = "mongodb://127.0.0.1:27017/pantrypal";
 const SECRET_KEY = process.env.SECRET_KEY || "defaultSecretKey"; // Fallback for SECRET_KEY
 
 // Connect to MongoDB
