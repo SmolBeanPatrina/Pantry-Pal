@@ -3,13 +3,6 @@ import TableOfContents from "./tableofcontents";
 import Section from "./sections";
 import Navbar from "./componenets/Navbar";
 
-const sections = [
-  { id: "section1", title: "Introduction", content: "This is the intro." },
-  { id: "section2", title: "Chapter 1", content: "This is chapter 1." },
-  { id: "section3", title: "Chapter 2", content: "This is chapter 2." },
-  { id: "section4", title: "Conclusion", content: "This is the conclusion." },
-];
-
 const RecipePage = () => {
       const [recipesData, setRecipes] = useState({
         recipes: []
@@ -60,6 +53,19 @@ const RecipePage = () => {
         }
     };
 
+    const convertToReadable = (string) => {
+        const decodedDiv = document.createElement('div');
+        decodedDiv.innerHTML = string;
+
+        const plainText = decodedDiv.textContent || decodedDiv.innerText;
+        return plainText;
+    }
+
+    const printAndGiveBack = (image) => {
+        console.log(image);
+        return image;
+    }
+
     useEffect(() => {
         console.log(recipesData); // This will log when the state is updated
       }, [recipesData]);
@@ -69,7 +75,7 @@ const RecipePage = () => {
             <Navbar />
             <button
                 onClick={getRecipes}
-                className="mt-16 bg-red-500 text-white px-4 py-2 rounded-full"
+                className="mt-16 mb-8 bg-red-500 text-white px-4 py-2 rounded-full"
             >
                 Generate Recipes
             </button>
@@ -81,7 +87,9 @@ const RecipePage = () => {
                     key={section.id}
                     id={section.id}
                     title={section.title}
-                    content={section.summary}
+                    content={convertToReadable(section.description)}
+                    image = {printAndGiveBack(section.image)}
+                    source = {section.sourceUrl}
                 />
                 ))}
             </main>

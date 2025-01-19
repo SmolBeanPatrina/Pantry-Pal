@@ -75,30 +75,6 @@ const SignupForm = ({ onSwitchToLogin }) => {
           />
         </div>
         <div style={{ marginBottom: "15px" }}>
-          <label htmlFor="dietaryRestrictions">Dietary Restrictions</label>
-          <input
-            type="text"
-            id="dietaryRestrictions"
-            name="dietaryRestrictions"
-            value={formData.dietaryRestrictions}
-            onChange={handleChange}
-            placeholder="Enter your dietary restrictions"
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </div>
-        <div style={{ marginBottom: "15px" }}>
-          <label htmlFor="ingredients">Preferred Ingredients</label>
-          <input
-            type="text"
-            id="ingredients"
-            name="ingredients"
-            value={formData.ingredients}
-            onChange={handleChange}
-            placeholder="Enter your preferred ingredients"
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </div>
-        <div style={{ marginBottom: "15px" }}>
           <label htmlFor="password">Password</label>
           <input
             type="password"

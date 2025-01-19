@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import logo from '../assets/logo.png';
 import SignupForm from "./SignupForm";
 import LoginForm from "./LoginForm";
+import AboutPage from "./About";
 
 const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -31,7 +32,7 @@ const Navbar = () => {
             <a href="/" className="cursor-pointer hover:text-gray-400">
               Home
             </a>
-            <a href="#About" className="cursor-pointer hover:text-gray-400">
+            <a href="/about" className="cursor-pointer hover:text-gray-400">
               About
             </a>
             <Link to="/testimonials" className="cursor-pointer hover:text-gray-400">
@@ -53,7 +54,7 @@ const Navbar = () => {
             </button>
             <button
               onClick={() => setShowSignupForm(true)}
-              className="bg-blue-500 text-white px-6 py-2 rounded-full whitespace-nowrap"
+              className="bg-amber-300 text-black px-6 py-2 rounded-full whitespace-nowrap"
             >
               Sign up
             </button>
@@ -86,24 +87,38 @@ const Navbar = () => {
           <ul className="flex flex-col items-center gap-2 mt-5 px-5 text-lg font-medium">
             <a
               onClick={() => setShowMobileMenu(false)}
-              href="#Header"
+              href="/"
               className="px-4 py-2 rounded-full inline-block"
             >
               Home
             </a>
             <a
               onClick={() => setShowMobileMenu(false)}
-              href="#About"
+              href="/about"
               className="px-4 py-2 rounded-full inline-block"
             >
               About
             </a>
             <a
               onClick={() => setShowMobileMenu(false)}
-              href="#Testimonials"
+              href="/testimonials"
               className="px-4 py-2 rounded-full inline-block"
             >
               Testimonials
+            </a>
+            <a
+              onClick={() => setShowMobileMenu(false)}
+              href="/recipes"
+              className="px-4 py-2 rounded-full inline-block"
+            >
+              Recipes
+            </a>
+            <a
+              onClick={() => setShowMobileMenu(false)}
+              href="/preferences"
+              className="px-4 py-2 rounded-full inline-block"
+            >
+              Preferences
             </a>
           </ul>
         </div>

@@ -77,7 +77,7 @@ export const projectsData = [
   export const testimonialsData = [
     {
         name: "Ahmed Khan",
-        title: "Lead Developer",
+        title: "Lead Frontend Developer",
         image: profile_img_1,
         alt: "Portrait of Ahmed Khan",
         rating: 5,
@@ -85,7 +85,7 @@ export const projectsData = [
     },
     {
         name: "Rajrupa Sanyal",
-        title: "UI/UX Designer",
+        title: "Lead Backend Developer",
         image: profile_img_2,
         alt: "Portrait of Rajrupa Sanyal",
         rating: 4,
@@ -93,7 +93,7 @@ export const projectsData = [
     },
     {
         name: "Patrina Cheung",
-        title: "Software Engineer",
+        title: "Lead Database Engineer",
         image: profile_img_3,
         alt: "Portrait of Patrina Cheung",
         rating: 5,
@@ -101,7 +101,7 @@ export const projectsData = [
     },
     {
       name: "Florence Shen ",
-      title: "Software Engineer",
+      title: "Lead Frontend Developer",
       image: profile_img_4,
       alt: "Portrait of Florence Shen ",
       rating: 5,
