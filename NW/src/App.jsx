@@ -4,6 +4,7 @@ import Header from './componenets/Header';
 import Testimonials from './componenets/Testimonials';
 import Preferences from './componenets/PreferencesForm';
 import AboutPage from './componenets/About';
+import Contact from './componenets/Contact';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/Testimonials" element={<Testimonials />} />
             <Route path="/preferences" element={<Preferences />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<Contact/>}/>
           </Routes>
         </main>
       </div>

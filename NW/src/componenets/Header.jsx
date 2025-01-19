@@ -12,7 +12,7 @@ const Header = () => {
         <div className='space-x-6 mt-16'>
             <a href="/preferences" className='border border-white px-8
             py-3 rounded'>Get Started</a>
-            <a href="#Contact" className='bg-gray-500 px-8
+            <a href="/Contact" className='bg-gray-500 px-8
             py-3 rounded'>Contact us</a>
         </div>
         </div>
