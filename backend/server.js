@@ -85,78 +85,103 @@ let recipeIds = []; // Global variable to store recipe IDs
 
 
 app.post('/preferences', async (req, res) => {
-    const {diet, cuisine, equipment, ingredients} = req.body;
+    console.log("Request Body:", req.body); // Log the incoming request body
+    const { username, cuisine, utensils, dietaryRestrictions, ingredients } = req.body;
 
     try {
-        // Call Spoonacular API to fetch recipes
-        console.log("about to get post");
+        // Find the user by username
+        const user = await User.findOne({ username });
 
-        const response = await axios.get('https://api.spoonacular.com/recipes/complexSearch', {
-            params: {
-                apiKey: process.env.SPOONACULAR_API_KEY,
-                includeIngredients: ingredients,
-                cuisine: cuisine,
-                diet: diet,
-                number: 10,
-                addRecipeInformation: false // Just get IDs
-            }
-        });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
 
-        // Save recipe IDs to the global variable
-        recipeIds = response.data.results.map(recipe => recipe.id);
-        console.log(recipeIds);
+        // Update the user's preferences
+        user.cuisine = cuisine || user.cuisine;
+        user.utensils = utensils || user.utensils;
+        user.dietaryRestrictions = dietaryRestrictions || user.dietaryRestrictions;
+        user.ingredients = ingredients || user.ingredients;
 
-        res.json({ message: 'Recipe IDs generated successfully', recipeIds });
+        // Save the updated user
+        await user.save();
+
+        res.json({ message: 'Preferences updated successfully', user });
     } catch (error) {
-        console.error('Error fetching recipes:', error.message);
-        res.status(500).json({ error: 'An error occurred while fetching recipes' });
+        console.error('Error updating preferences:', error.message);
+        res.status(500).json({ error: 'Failed to update preferences', details: error.message });
     }
 });
+
 
     
 
 // GET: Fetch full recipe details based on stored recipe IDs
+// Fetch recipes based on user preferences
 app.get('/recipes', async (req, res) => {
-    if (recipeIds.length === 0) {
-        return res.status(404).json({ error: 'No recipes found. Generate recipes first using POST /recipes.' });
-    }
+    const { username } = req.query;
 
     try {
-        // Fetch details for each recipe ID
-        const recipeDetailsPromises = recipeIds.map(id =>
-          axios.get(`https://api.spoonacular.com/recipes/${id}/information`, {
-              params: { apiKey: process.env.SPOONACULAR_API_KEY }
-          })
-      );
+        // Find the user by username
+        const user = await User.findOne({ username });
 
-      const recipeDetailsResponses = await Promise.all(recipeDetailsPromises);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
 
-      // Process the fetched recipe details
-      const recipes = recipeDetailsResponses.map(response => {
-          const recipe = response.data;
+        // Ensure ingredients and utensils are arrays
+        const ingredients = Array.isArray(user.ingredients) ? user.ingredients : [];
+        const utensils = Array.isArray(user.utensils) ? user.utensils : [];
 
-          // Decode and clean up the summary or description
-          const cleanDescription = recipe.summary
-              ? he.decode(recipe.summary.replace(/<\/?[^>]+(>|$)/g, ''))
-              : 'No description available.';
+        // Prepare query parameters based on user preferences
+        const queryParams = {
+            apiKey: process.env.SPOONACULAR_API_KEY,
+            cuisine: user.cuisine || undefined,
+            diet: user.dietaryRestrictions || undefined,
+            includeIngredients: ingredients.length > 0 ? ingredients.join(',') : undefined,
+            number: 10,
+        };
 
-          return {
-              id: recipe.id,
-              title: recipe.title,
-              description: cleanDescription,
-              instructions: recipe.instructions || 'No instructions provided.',
-              readyInMinutes: recipe.readyInMinutes,
-              servings: recipe.servings,
-              image: recipe.image,
-              sourceUrl: recipe.sourceUrl,
-          };
-      });
+        // If the user owns any utensils, include them in the query
+        if (utensils.length > 0) {
+            queryParams.equipment = utensils.join(','); // Convert array to comma-separated string
+        }
 
-      res.json({ recipes });
-  } catch (error) {
-      console.error('Error fetching recipe details:', error.message);
-      res.status(500).json({ error: 'An error occurred while fetching recipe details' });
-  }
+        // Fetch basic recipes from Spoonacular based on the user's preferences
+        const response = await axios.get('https://api.spoonacular.com/recipes/complexSearch', {
+            params: queryParams,
+        });
+
+        // Fetch full details for each recipe by using their IDs
+        const recipeDetailsPromises = response.data.results.map(recipe =>
+            axios.get(`https://api.spoonacular.com/recipes/${recipe.id}/information`, {
+                params: { apiKey: process.env.SPOONACULAR_API_KEY },
+            })
+        );
+
+        // Wait for all the details to be fetched
+        const recipeDetailsResponses = await Promise.all(recipeDetailsPromises);
+
+        // Map the responses to the required format
+        const recipes = recipeDetailsResponses.map(recipe => {
+            const detailedRecipe = recipe.data;
+            return {
+                id: detailedRecipe.id,
+                title: detailedRecipe.title,
+                description: detailedRecipe.summary || 'No description available.',
+                instructions: detailedRecipe.instructions || 'No instructions provided.',
+                readyInMinutes: detailedRecipe.readyInMinutes,
+                servings: detailedRecipe.servings,
+                image: detailedRecipe.image,
+                sourceUrl: detailedRecipe.sourceUrl,
+            };
+        });
+
+        // Return the full recipe details
+        res.json({ recipes });
+    } catch (error) {
+        console.error('Error fetching recipes:', error.message);
+        res.status(500).json({ error: 'Failed to fetch recipes' });
+    }
 });
 
 // Start the Server

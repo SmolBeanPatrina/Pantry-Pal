@@ -4,78 +4,64 @@ import Navbar from "./Navbar";
 const PreferencesForm = () => {
   const [formData, setFormData] = useState({
     diet: "omnivore",
-    cuisines: "",
-    utensils: "",
-    ingredients: ""
+    cuisine: "",
+    utensils: [],
+    ingredients: [],
   });
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const handleCheckboxChange = (e, key) => {
+    const { value, checked } = e.target;
 
-    if (type === "checkbox") {
-      setFormData({
-        ...formData,
-        [name]: checked,
-      });
-    } else {
-      setFormData((prevFormData) => ({
+    setFormData((prevFormData) => {
+      const updatedArray = checked
+        ? [...prevFormData[key], value] // Add value if checked
+        : prevFormData[key].filter((item) => item !== value); // Remove value if unchecked
+
+      return {
         ...prevFormData,
-        [name]: value,
-      }));
-    }
-  };
-
-  const handleUtensilsChange = (e) => {
-    const { options } = e.target;
-    const selectedOptions = Array.from(options)
-      .filter((option) => option.selected)
-      .map((option) => option.value);
-
-    // Convert the array to a comma-separated string
-    setFormData({
-      ...formData,
-      utensils: selectedOptions.join(", "),
-    });
-  };
-  
-  const handleCuisinesChange = (e) => {
-    const { options } = e.target;
-    const selectedOptions = Array.from(options)
-      .filter((option) => option.selected)
-      .map((option) => option.value);
-
-    // Convert the array to a comma-separated string
-    setFormData({
-      ...formData,
-      cuisines: selectedOptions.join(", "),
+        [key]: updatedArray,
+      };
     });
   };
 
-  const handleIngredientsChange = (e) => {
-    const { options } = e.target;
-    const selectedOptions = Array.from(options)
-      .filter((option) => option.selected)
-      .map((option) => option.value);
-
-    // Convert the array to a comma-separated string
+  const handleDietChange = (e) => {
     setFormData({
       ...formData,
-      ingredients: selectedOptions.join(", "),
+      diet: e.target.value,
     });
   };
 
+  const handleCuisineChange = (e) => {
+    const { value } = e.target;
+
+    console.log(`Cuisine selected: ${value}`); // Debugging log
+    setFormData({
+      ...formData,
+      cuisine: value, // Correctly update the cuisine field
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   
+    const username = localStorage.getItem("username"); // Retrieve username from localStorage
+    if (!username) {
+      alert("User not logged in");
+      return;
+    }
+  
+    console.log("Form Data Sent to API:", formData); // Log data being sent to the backend
+  
     try {
-      // Send the form data to the server
       const response = await fetch("http://localhost:4000/preferences", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          username: localStorage.getItem("username"), // Use the username from localStorage
+          ...formData,
+        }),
       });
   
       if (response.ok) {
@@ -87,11 +73,10 @@ const PreferencesForm = () => {
         alert("Error during preferences selection. Please try again.");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error updating preferences:", error.message);
       alert("An error occurred. Please check your network connection.");
     }
   };
-  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
@@ -102,104 +87,102 @@ const PreferencesForm = () => {
         </p>
       </header>
       <form onSubmit={handleSubmit}>
+        <div className="flex flex-col space-y-4 mb-8">
+          {/* Diet Options */}
+          <label htmlFor="diet">
+            <strong>Pick your diet:</strong>
+          </label>
+          <select
+            id="diet"
+            name="diet"
+            value={formData.diet}
+            onChange={handleDietChange}
+          >
+            <option value="omnivore">Omnivore</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="vegan">Vegan</option>
+          </select>
+        </div>
+
+        {/* Cuisines */}
         <div className="flex flex-col space-y-2 mb-8">
-          {/* Vegetarian Checkbox */}
-          <label htmlFor="diet"><strong>Pick your diet:</strong></label>
-            <select
-              id="diet"
-              name="diet"
-              value={formData.diet}
-              onChange={handleChange}
-            >
-              <option value="omnivore">Omnivore</option>
-              <option value="vegetarian">Vegetarian</option>
-              <option value="vegan">Vegan</option>
-            </select>
+          <label>
+            <strong>Select your favourite cuisine:</strong>
+          </label>
+          {["Italian", "Chinese", "Indian", "Mexican"].map((cuisine) => (
+            <label key={cuisine}>
+              <input
+                type="radio"
+                name="cuisine"
+                value={cuisine.toLowerCase()}
+                checked={formData.cuisine === cuisine.toLowerCase()}
+                onChange={handleCuisineChange}
+              />
+              {cuisine}
+            </label>
+          ))}
+            </div>
 
+        {/* Utensils */ }
+            < div className = "flex flex-col space-y-2 mb-8" >
+            <label>
+              <strong>Select your kitchen utensils:</strong>
+            </label>
+          {
+              ["Knife", "Spatula", "Mixing Bowl", "Whisk", "Grater", "Peeler"].map(
+                (utensil) => (
+                  <label key={utensil}>
+                    <input
+                      type="checkbox"
+                      value={utensil.toLowerCase().replace(" ", "_")}
+                      checked={formData.utensils.includes(
+                        utensil.toLowerCase().replace(" ", "_")
+                      )}
+                      onChange={(e) => handleCheckboxChange(e, "utensils")}
+                    />
+                    {utensil}
+                  </label>
+                )
+              )
+            }
         </div>
-        <div className="flex flex-col items-start space-y-2 mb-8">
-          <label htmlFor="cuisines"><strong>Select your favourite cuisines:</strong></label>
-          <select
-            id="cuisines"
-            name="cuisines"
-            multiple
-            value={formData.cuisines.split(", ").filter(Boolean)}
-            onChange={handleCuisinesChange}
-            style={{ width: "200px", height: "100px" }} // Add some size for better usability
-          >
-            <option value="italian">Italian</option>
-            <option value="chinese">Chinese</option>
-            <option value="indian">Indian</option>
-            <option value="mexican">Mexican</option>
-          </select>
-        </div>
-        <div className="flex flex-col items-start space-y-2 mb-8">
-          <label htmlFor="utensils"><strong>Select your kitchen utensils:</strong></label>
-          <select
-            id="utensils"
-            name="utensils"
-            multiple
-            value={formData.utensils.split(", ").filter(Boolean)}
-            onChange={handleUtensilsChange}
-            style={{ width: "200px", height: "100px" }} // Add some size for better usability
-          >
-            <option value="knife">Knife</option>
-            <option value="spatula">Spatula</option>
-            <option value="mixing_bowl">Mixing Bowl</option>
-            <option value="whisk">Whisk</option>
-            <option value="grater">Grater</option>
-            <option value="peeler">Peeler</option>
-          </select>
-        </div>
-        <div className="flex flex-col items-start space-y-2 mb-8">
-          <label htmlFor="ingredients"><strong>Select the ingredients you have in your fridge:</strong></label>
-          <select
-            id="ingredients"
-            name="ingredients"
-            multiple
-            value={formData.ingredients.split(", ").filter(Boolean)}
-            onChange={handleIngredientsChange}
-            style={{ width: "200px", height: "100px" }} // Add some size for better usability
-          >
-            <option value="salt">Salt</option>
-            <option value="pepper">Pepper</option>
-            <option value="sugar">Sugar</option>
-            <option value="flour">Flour</option>
-            <option value="butter">Butter</option>
-            <option value="oil">Oil</option>
-            <option value="vinegar">Vinegar</option>
-            <option value="garlic">Garlic</option>
-            <option value="onion">Onion</option>
-            <option value="tomato">Tomato</option>
-            <option value="egg">Egg</option>
-            <option value="milk">Milk</option>
-            <option value="cheese">Cheese</option>
-            <option value="bread">Bread</option>
-            <option value="chicken">Chicken</option>
-            <option value="beef">Beef</option>
-            <option value="carrot">Carrot</option>
-            <option value="potato">Potato</option>
-            <option value="rice">Rice</option>
-            <option value="pasta">Pasta</option>
-            <option value="lemon">Lemon</option>
-            <option value="basil">Basil</option>
-            <option value="parsley">Parsley</option>
-            <option value="cinnamon">Cinnamon</option>
-            <option value="honey">Honey</option>
-            <option value="ginger">Ginger</option>
-            <option value="chili_powder">Chili Powder</option>
-            <option value="paprika">Paprika</option>
-            <option value="soy_sauce">Soy Sauce</option>
-            <option value="ketchup">Ketchup</option>
-            <option value="mustard">Mustard</option>
-            <option value="mayonnaise">Mayonnaise</option>
-            <option value="cream">Cream</option>
-            <option value="yeast">Yeast</option>
 
-          </select>
+        {/* Ingredients */}
+        <div className="flex flex-col space-y-2 mb-8">
+          <label>
+            <strong>Select the ingredients you have in your fridge:</strong>
+          </label>
+          {[
+            "Salt",
+            "Pepper",
+            "Tomato",
+            "Garlic",
+            "Cheese",
+            "Chicken",
+            "Rice",
+            "Basil",
+          ].map((ingredient) => (
+            <label key={ingredient}>
+              <input
+                type="checkbox"
+                value={ingredient.toLowerCase().replace(" ", "_")}
+                checked={formData.ingredients.includes(
+                  ingredient.toLowerCase().replace(" ", "_")
+                )}
+                onChange={(e) => handleCheckboxChange(e, "ingredients")}
+              />
+              {ingredient}
+            </label>
+          ))}
         </div>
-        <div className=" items-center ">
-          <button type="submit" className="bg-gray-500 text-white px-6 py-2 rounded-full mb-8">
+
+        {/* Submit Button */}
+        <div className="items-center">
+          <button
+            type="submit"
+            className="bg-gray-500 text-white px-6 py-2 rounded-full mb-8"
+            onClick={() => console.log(formData)}
+          >
             Save
           </button>
         </div>

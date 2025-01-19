@@ -13,22 +13,30 @@ const LoginForm = ({ onClose }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-      const response = await fetch("http://localhost:4000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(loginData),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        alert("Login successful!");
-        onClose();
-      } else {
-        alert("Invalid username or password.");
-      }
+    
+    const response = await fetch("http://localhost:4000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginData),
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      console.log(result);  // Log the response from the server to check the data
+  
+      const { username, token } = result;  // Assuming the backend returns these
+      
+      // Store the username and token (JWT)
+      localStorage.setItem("username", loginData.username);
+      localStorage.setItem("token", token);
+      window.location.reload();
+      alert("Login successful!");
+      onClose();
+    } else {
+      alert("Invalid username or password.");
+    }
   };
 
   return (
