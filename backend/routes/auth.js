@@ -8,11 +8,20 @@ const SECRET_KEY = process.env.JWT_SECRET;
 
 // Register
 router.post('/register', async (req, res) => {
-    const { username, password, dietaryRestrictions, ingredients } = req.body;
+    const { username, password, name, dietaryRestrictions, ingredients } = req.body;
+
+    if (!username || !password || !name) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
 
     try {
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ error: 'Username already taken' });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ username, password: hashedPassword, dietaryRestrictions, ingredients });
+        const user = new User({ username, password: hashedPassword, name, dietaryRestrictions, ingredients });
         await user.save();
         res.status(201).json({ message: 'User registered successfully' });
     } catch (err) {

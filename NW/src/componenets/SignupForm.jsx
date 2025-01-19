@@ -2,10 +2,11 @@ import React, { useState } from "react";
 
 const SignupForm = ({ onSwitchToLogin }) => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
+    username: "",
     password: "",
+    name: "",
+    dietaryRestrictions: "",
+    ingredients: "",
   });
 
   const handleChange = (e) => {
@@ -20,7 +21,8 @@ const SignupForm = ({ onSwitchToLogin }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/api/reg", {
+      // Send the form data to the backend
+      const response = await fetch("http://localhost:4000/register", {  // Make sure the endpoint matches the backend route
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,41 +47,52 @@ const SignupForm = ({ onSwitchToLogin }) => {
       <h2>Signup Form</h2>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: "15px" }}>
-          <label htmlFor="firstName">First Name</label>
+          <label htmlFor="username">Username</label>
           <input
             type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
+            id="username"
+            name="username"
+            value={formData.username}
             onChange={handleChange}
-            placeholder="Enter your first name"
+            placeholder="Enter your username"
             required
             style={{ width: "100%", padding: "8px" }}
           />
         </div>
         <div style={{ marginBottom: "15px" }}>
-          <label htmlFor="lastName">Last Name</label>
+          <label htmlFor="name">Name</label>
           <input
             type="text"
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
+            id="name"
+            name="name"
+            value={formData.name}
             onChange={handleChange}
-            placeholder="Enter your last name"
+            placeholder="Enter your full name"
             required
             style={{ width: "100%", padding: "8px" }}
           />
         </div>
         <div style={{ marginBottom: "15px" }}>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="dietaryRestrictions">Dietary Restrictions</label>
           <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
+            type="text"
+            id="dietaryRestrictions"
+            name="dietaryRestrictions"
+            value={formData.dietaryRestrictions}
             onChange={handleChange}
-            placeholder="Enter your email"
-            required
+            placeholder="Enter your dietary restrictions"
+            style={{ width: "100%", padding: "8px" }}
+          />
+        </div>
+        <div style={{ marginBottom: "15px" }}>
+          <label htmlFor="ingredients">Preferred Ingredients</label>
+          <input
+            type="text"
+            id="ingredients"
+            name="ingredients"
+            value={formData.ingredients}
+            onChange={handleChange}
+            placeholder="Enter your preferred ingredients"
             style={{ width: "100%", padding: "8px" }}
           />
         </div>

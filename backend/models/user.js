@@ -4,9 +4,8 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     name: { type: String, required: true },
-    dietaryRestrictions: {type: [String], deafult: []},
-    ingredients: {type: [String], deafult: []},
-    savedRecipes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Recipe' }],
+    dietaryRestrictions: { type: [String], default: [] },
+    ingredients: { type: [String], default: [] },
 });
 
 module.exports = mongoose.model('User', userSchema);
