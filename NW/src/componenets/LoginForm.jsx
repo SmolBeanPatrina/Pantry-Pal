@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const LoginForm = ({ onClose }) => {
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [loginData, setLoginData] = useState({ username: "", password: "" });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,7 +28,7 @@ const LoginForm = ({ onClose }) => {
         alert("Login successful!");
         onClose();
       } else {
-        alert("Invalid email or password.");
+        alert("Invalid username or password.");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -41,14 +41,14 @@ const LoginForm = ({ onClose }) => {
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <div style={{ marginBottom: "15px" }}>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="username">Username</label>
           <input
-            type="email"
-            id="email"
-            name="email"
-            value={loginData.email}
+            type="text"
+            id="username"
+            name="username"
+            value={loginData.username}
             onChange={handleChange}
-            placeholder="Enter your email"
+            placeholder="Enter your username"
             required
             style={{ width: "100%", padding: "8px" }}
           />

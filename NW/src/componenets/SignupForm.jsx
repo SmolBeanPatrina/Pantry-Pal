@@ -22,7 +22,8 @@ const SignupForm = ({ onSwitchToLogin }) => {
 
     try {
       // Send the form data to the backend
-      const response = await fetch("http://localhost:4000/register", {  // Make sure the endpoint matches the backend route
+      console.log(formData);
+      const response = await fetch("http://localhost:4000/create-user", {  // Make sure the endpoint matches the backend route
         method: "POST",
         headers: {
           "Content-Type": "application/json",
