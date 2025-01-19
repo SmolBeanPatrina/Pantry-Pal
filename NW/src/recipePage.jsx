@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TableOfContents from "./tableofcontents";
 import Section from "./sections";
 import Navbar from "./componenets/Navbar";
@@ -21,7 +21,7 @@ const RecipePage = () => {
       
         try {
           
-          const response = await fetch("http://localhost:3000/recipes", {
+          const response = await fetch("http://localhost:4000/recipes", {
             method: "GET",  // Use GET instead of POST
             headers: {
               "Content-Type": "application/json",  // This is optional for GET requests, but it's safe to include it
@@ -34,15 +34,21 @@ const RecipePage = () => {
             alert("Got recipes!");
 
             // Parse the JSON string into a JavaScript object
-            const parsedObject = JSON.parse(response);
+            //alert(response);
+            const jsonString = JSON.stringify(result);
+            console.log(jsonString);
+
+            const parsedObject = JSON.parse(jsonString);
 
             // Accessing specific fields from each recipe
             //const firstRecipeId = parsedObject.results[0].id;
 
             setRecipes(prevState => ({
                 ...prevState,  // Spread the previous state
-                recipes: parsedObject.results  // Replace the old recipes array with the new one
+                recipes: parsedObject.recipes  // Replace the old recipes array with the new one
             }));
+
+            console.log(recipesData);
 
           } else {
             console.error("Failed to get recipes:", response.statusText);
@@ -53,6 +59,10 @@ const RecipePage = () => {
           alert("An error occurred. Please check your network connection.");
         }
     };
+
+    useEffect(() => {
+        console.log(recipesData); // This will log when the state is updated
+      }, [recipesData]);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen">
@@ -69,6 +79,12 @@ const RecipePage = () => {
                 />
                 ))}
             </main>
+            <button
+                style={{ padding: "10px 15px", cursor: "pointer" }}
+                onClick={getRecipes}
+            >
+                Generate Recipes
+            </button>
             </div>
         </div>
     );

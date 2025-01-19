@@ -3,11 +3,10 @@ import Navbar from "./Navbar";
 
 const PreferencesForm = () => {
   const [formData, setFormData] = useState({
-    vegetarian: false,
-    vegan: false,
-    cuisines: [],
-    utensils: [],
-    ingredients: []
+    diet: "omnivore",
+    cuisines: "",
+    utensils: "",
+    ingredients: ""
   });
 
   const handleChange = (e) => {
@@ -19,10 +18,10 @@ const PreferencesForm = () => {
         [name]: checked,
       });
     } else {
-      setFormData({
-        ...formData,
+      setFormData((prevFormData) => ({
+        ...prevFormData,
         [name]: value,
-      });
+      }));
     }
   };
 
@@ -32,21 +31,23 @@ const PreferencesForm = () => {
       .filter((option) => option.selected)
       .map((option) => option.value);
 
+    // Convert the array to a comma-separated string
     setFormData({
       ...formData,
-      utensils: selectedOptions,
+      utensils: selectedOptions.join(", "),
     });
   };
-
+  
   const handleCuisinesChange = (e) => {
     const { options } = e.target;
     const selectedOptions = Array.from(options)
       .filter((option) => option.selected)
       .map((option) => option.value);
 
+    // Convert the array to a comma-separated string
     setFormData({
       ...formData,
-      cuisines: selectedOptions,
+      cuisines: selectedOptions.join(", "),
     });
   };
 
@@ -56,9 +57,10 @@ const PreferencesForm = () => {
       .filter((option) => option.selected)
       .map((option) => option.value);
 
+    // Convert the array to a comma-separated string
     setFormData({
       ...formData,
-      ingredients: selectedOptions,
+      ingredients: selectedOptions.join(", "),
     });
   };
 
@@ -68,7 +70,7 @@ const PreferencesForm = () => {
   
     try {
       // Send the form data to the server
-      const response = await fetch("http://localhost:3000/signup", {
+      const response = await fetch("http://localhost:4000/preferences", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,26 +104,18 @@ const PreferencesForm = () => {
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col space-y-2 mb-8">
           {/* Vegetarian Checkbox */}
-          <label>
-            <input
-              type="checkbox"
-              name="vegetarian"
-              checked={formData.vegetarian} // Controlled component
+          <label htmlFor="diet">Pick your diet:</label>
+            <select
+              id="diet"
+              name="diet"
+              value={formData.diet}
               onChange={handleChange}
-            />
-            Vegetarian
-          </label>
+            >
+              <option value="omnivore">Omnivore</option>
+              <option value="vegetarian">Vegetarian</option>
+              <option value="vegan">Vegan</option>
+            </select>
 
-          {/* Vegan Checkbox */}
-          <label>
-            <input
-              type="checkbox"
-              name="vegan"
-              checked={formData.vegan} // Controlled component
-              onChange={handleChange}
-            />
-            Vegan
-          </label>
         </div>
         <div className="flex flex-col items-start space-y-2 mb-8">
           <label htmlFor="cuisines">Select your favourite cuisines:</label>
@@ -129,7 +123,7 @@ const PreferencesForm = () => {
             id="cuisines"
             name="cuisines"
             multiple
-            value={formData.cuisines}
+            value={formData.cuisines.split(", ").filter(Boolean)}
             onChange={handleCuisinesChange}
             style={{ width: "200px", height: "100px" }} // Add some size for better usability
           >
@@ -145,7 +139,7 @@ const PreferencesForm = () => {
             id="utensils"
             name="utensils"
             multiple
-            value={formData.utensils}
+            value={formData.utensils.split(", ").filter(Boolean)}
             onChange={handleUtensilsChange}
             style={{ width: "200px", height: "100px" }} // Add some size for better usability
           >
@@ -163,7 +157,7 @@ const PreferencesForm = () => {
             id="ingredients"
             name="ingredients"
             multiple
-            value={formData.ingredients}
+            value={formData.ingredients.split(", ").filter(Boolean)}
             onChange={handleIngredientsChange}
             style={{ width: "200px", height: "100px" }} // Add some size for better usability
           >

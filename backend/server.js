@@ -7,11 +7,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
 const User = require('./models/User'); // Ensure this is correctly defined in your models folder
-
 // Load environment variables
 dotenv.config();
 
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT || 5000;
 const mongoURI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/pantrypal";
 const SECRET_KEY = process.env.SECRET_KEY || "defaultSecretKey"; // Fallback for SECRET_KEY
@@ -80,25 +80,62 @@ app.post('/login', async (req, res) => {
 });
 
 // Recipe Endpoint
+let recipeIds = []; // Global variable to store recipe IDs
+
+
+app.post('/preferences', async (req, res) => {
+    const {diet, cuisine, equipment, ingredients} = req.body;
+
+    try {
+        // Call Spoonacular API to fetch recipes
+        console.log("about to get post");
+
+        const response = await axios.get('https://api.spoonacular.com/recipes/complexSearch', {
+            params: {
+                apiKey: process.env.SPOONACULAR_API_KEY,
+                includeIngredients: ingredients,
+                cuisine: cuisine,
+                diet: diet,
+                number: 10,
+                addRecipeInformation: false // Just get IDs
+            }
+        });
+
+        // Save recipe IDs to the global variable
+        recipeIds = response.data.results.map(recipe => recipe.id);
+        console.log(recipeIds);
+
+        res.json({ message: 'Recipe IDs generated successfully', recipeIds });
+    } catch (error) {
+        console.error('Error fetching recipes:', error.message);
+        res.status(500).json({ error: 'An error occurred while fetching recipes' });
+    }
+});
+
+    
+
+// GET: Fetch full recipe details based on stored recipe IDs
 app.get('/recipes', async (req, res) => {
-  const { includeIngredients, cuisine, diet } = req.query;
+    if (recipeIds.length === 0) {
+        return res.status(404).json({ error: 'No recipes found. Generate recipes first using POST /recipes.' });
+    }
 
-  try {
-    const response = await axios.get('https://api.spoonacular.com/recipes/complexSearch', {
-      params: {
-        apiKey: process.env.SPOONACULAR_API_KEY,
-        includeIngredients, // List of ingredients
-        cuisine,            // Cuisine preference
-        diet,               // Diet preference
-        addRecipeInformation: true,
-      },
-    });
+    try {
+        // Fetch details for each recipe ID
+        const recipeDetailsPromises = recipeIds.map(id =>
+            axios.get(`https://api.spoonacular.com/recipes/${id}/information`, {
+                params: { apiKey: process.env.SPOONACULAR_API_KEY }
+            })
+        );
 
-    res.json(response.data); // Send the API response back to the client
-  } catch (error) {
-    console.error('Error fetching data from Spoonacular:', error.message);
-    res.status(500).json({ error: 'An error occurred', details: error.message });
-  }
+        const recipeDetailsResponses = await Promise.all(recipeDetailsPromises);
+        const recipes = recipeDetailsResponses.map(response => response.data);
+
+        res.json({ recipes });
+    } catch (error) {
+        console.error('Error fetching recipe details:', error.message);
+        res.status(500).json({ error: 'An error occurred while fetching recipe details' });
+    }
 });
 
 // Start the Server
