@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
 import SignupForm from "./SignupForm";
+import LoginForm from "./LoginForm";
 
 const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showSignupForm, setShowSignupForm] = useState(false);
+  const [showLoginForm, setShowLoginForm] = useState(false);
 
   useEffect(() => {
-    if (showMobileMenu || showSignupForm) {
+    if (showMobileMenu || showSignupForm || showLoginForm) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
@@ -16,17 +18,14 @@ const Navbar = () => {
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [showMobileMenu, showSignupForm]);
+  }, [showMobileMenu, showSignupForm, showLoginForm]);
 
   return (
     <div>
       {/* Fixed Rectangle Container at the Top */}
       <div className="fixed top-0 left-0 w-full bg-gray-100 shadow-md border-b border-gray-200 z-50">
-        <div
-          className="container mx-auto flex justify-between 
-          items-center py-4 px-6 md:px-20 lg:px-32"
-        >
-          <img src={assets.logo} alt="Logo" className="w-auto max-w-xs h-20"/>
+        <div className="container mx-auto flex justify-between items-center py-4 px-6 md:px-20 lg:px-32">
+          <img src={assets.logo} alt="Logo" className="w-auto max-w-xs h-20" />
           <ul className="hidden md:flex gap-7 text-gray-800 font-medium">
             <a href="/" className="cursor-pointer hover:text-gray-400">
               Home
@@ -39,17 +38,25 @@ const Navbar = () => {
             </a>
             <Link to="/testimonials" className="cursor-pointer hover:text-gray-400">
               Testimonials
-              </Link>
+            </Link>
             <Link to="/recipes" className="cursor-pointer hover:text-gray-400">
               Recipes
             </Link>
           </ul>
-          <button
-            onClick={() => setShowSignupForm(true)}
-            className="hidden md:block bg-blue-500 text-white px-8 py-2 rounded-full"
-          >
-            Sign up
-          </button>
+          <div className="hidden md:flex gap-4">
+            <button
+              onClick={() => setShowLoginForm(true)}
+              className="bg-gray-500 text-white px-6 py-2 rounded-full"
+            >
+              Log in
+            </button>
+            <button
+              onClick={() => setShowSignupForm(true)}
+              className="bg-blue-500 text-white px-6 py-2 rounded-full"
+            >
+              Sign up
+            </button>
+          </div>
           <img
             onClick={() => setShowMobileMenu(true)}
             src={assets.menu_icon}
@@ -118,8 +125,53 @@ const Navbar = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <SignupForm />
+              <p className="mt-4 text-center">
+                Already have an account?{" "}
+                <button
+                  onClick={() => {
+                    setShowSignupForm(false);
+                    setShowLoginForm(true);
+                  }}
+                  className="text-blue-500 underline"
+                >
+                  Log in
+                </button>
+              </p>
               <button
                 onClick={() => setShowSignupForm(false)}
+                className="mt-4 bg-red-500 text-white px-4 py-2 rounded-full"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Login Form Modal */}
+        {showLoginForm && (
+          <div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+            onClick={() => setShowLoginForm(false)}
+          >
+            <div
+              className="bg-white p-6 rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <LoginForm />
+              <p className="mt-4 text-center">
+                Don’t have an account?{" "}
+                <button
+                  onClick={() => {
+                    setShowLoginForm(false);
+                    setShowSignupForm(true);
+                  }}
+                  className="text-blue-500 underline"
+                >
+                  Sign up
+                </button>
+              </p>
+              <button
+                onClick={() => setShowLoginForm(false)}
                 className="mt-4 bg-red-500 text-white px-4 py-2 rounded-full"
               >
                 Close
