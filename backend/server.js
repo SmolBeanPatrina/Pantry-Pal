@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
+const he = require('he');
 const User = require('./models/User'); // Ensure this is correctly defined in your models folder
 // Load environment variables
 dotenv.config();
