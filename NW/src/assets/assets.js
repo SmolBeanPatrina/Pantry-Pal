@@ -16,6 +16,7 @@ import project_img_6 from './project_img_6.jpg'
 import profile_img_1 from './profile_img_1.png'
 import profile_img_2 from './profile_img_2.png'
 import profile_img_3 from './profile_img_3.png'
+import profile_img_4 from './profile_img_4.png'
 
 export const assets = {
     logo,
@@ -75,27 +76,35 @@ export const projectsData = [
 
   export const testimonialsData = [
     {
-        name: "Donald Jackman",
-        title: "Marketing Manager",
+        name: "Ahmed Khan",
+        title: "Lead Developer",
         image: profile_img_1,
-        alt: "Portrait of Donald Jackman",
+        alt: "Portrait of Ahmed Khan",
         rating: 5,
-        text: "From the very first meeting, they understood my vision and helped me find the perfect property. Their attention to detail and commitment to client satisfaction is unmatched."
+        text: "From the very first interaction, it understood my vision and helped me find the perfect Nutritional diet. Truly changed my Life."
     },
     {
-        name: "Richard Nelson",
+        name: "Rajrupa Sanyal",
         title: "UI/UX Designer",
         image: profile_img_2,
-        alt: "Portrait of Richard Nelson",
+        alt: "Portrait of Rajrupa Sanyal",
         rating: 4,
-        text: "From the very first meeting, they understood my vision and helped me find the perfect property. Their attention to detail and commitment to client satisfaction is unmatched."
+        text: "Transformed my life with the perfect diet. I am now more energetic and focused than ever before."
     },
     {
-        name: "James Washington",
-        title: "Co-Founder",
+        name: "Patrina Cheung",
+        title: "Software Engineer",
         image: profile_img_3,
-        alt: "Portrait of James Washington",
+        alt: "Portrait of Patrina Cheung",
         rating: 5,
-        text: "From the very first meeting, they understood my vision and helped me find the perfect property. Their attention to detail and commitment to client satisfaction is unmatched."
-    }
+        text: "I am so grateful for the Nutritional diet. It has helped me to stay healthy and fit. I highly recommend it to everyone."
+    },
+    {
+      name: "Florence Shen ",
+      title: "Software Engineer",
+      image: profile_img_4,
+      alt: "Portrait of Florence Shen ",
+      rating: 5,
+      text: "I am delighted with the excellet and easy recipes generated, it has been a great help to me and my family."
+  }
 ];
