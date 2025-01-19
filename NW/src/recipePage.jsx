@@ -1,8 +1,7 @@
 import React from "react";
 import TableOfContents from "./tableofcontents";
 import Section from "./sections";
-import './App.css';
-
+import Navbar from "./componenets/Navbar";
 const sections = [
   { id: "section1", title: "Introduction", content: "This is the intro." },
   { id: "section2", title: "Chapter 1", content: "This is chapter 1." },
@@ -12,6 +11,7 @@ const sections = [
 
 const App = () => (
   <div >
+    <Navbar />
     <TableOfContents sections={sections} />
     <main className>
       {sections.map((section) => (

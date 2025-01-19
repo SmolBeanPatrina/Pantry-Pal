@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
+import { Link } from "react-router-dom"; // Import the Link component
 import SignupForm from "./SignupForm"; // Import the SignupForm component
 
 const Navbar = () => {
@@ -24,9 +25,9 @@ const Navbar = () => {
         item-center py-4 px-6 md:px-20 lg:px-32 bg-transparent"
       >
         <img src={assets.logo} alt="" />
-        <ul className="hidden md:flex gap-7 text-white">
+        <ul className="hidden md:flex gap-7 text-black font-medium">
           <a
-            href="#Header"
+            href="/"
             className="cursor-pointer hover:text-gray-400"
           >
             Home
@@ -49,6 +50,9 @@ const Navbar = () => {
           >
             Testimonials
           </a>
+          <Link to="/recipes" className='cursor-pointer hover:text-gray-400'>
+                    Recipes
+            </Link>
         </ul>
         <button
           onClick={() => setShowSignupForm(true)} // Trigger SignupForm
@@ -106,8 +110,8 @@ const Navbar = () => {
           <a
             onClick={() => setShowMobileMenu(false)}
             href="#Testimonials"
-            className="px-4 py2 rounded-full inline-block"
-          >
+            className="px-4 py2 rounded-full inline-block">
+
             Testimonials
           </a>
         </ul>
