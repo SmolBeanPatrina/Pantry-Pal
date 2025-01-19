@@ -10,45 +10,83 @@ const mongoose = require('mongoose');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 const mongoURI = process.env.MONGO_URI;
 
 mongoose
-  .connect("mongodb://localhost:27017/pantrypal", { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect("mongodb://127.0.0.1:27017/pantrypal")
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Failed to connect to MongoDB", err));
 
 // Create a new user
-const createUser = async () => {
-  const newUser = new User({
-    username: "exampleUser",
-    password: "securePassword123", // Ideally, hash this before saving!
-    name: "John Doe",
-  });
+// const createUser = async () => {
+//   const newUser = new User({
+//     username: "exampleUser",
+//     password: "securePassword123", // Ideally, hash this before saving!
+//     name: "John Doe",
+//   });
 
-  try {
-    const savedUser = await newUser.save();
-    console.log("User created successfully:", savedUser);
-  } catch (err) {
-    console.error("Error creating user:", err);
-  }
-};
+//   try {
+//     const savedUser = await newUser.save();
+//     console.log("User created successfully:", savedUser);
+//   } catch (err) {
+//     console.error("Error creating user:", err);
+//   }
+// };
 
-createUser();
+// createUser();
 
 // Middleware
 app.use(bodyParser.json()); // Parse incoming JSON requests
 
 // Connect to MongoDB
-connectDB();
+// connectDB();
 
 // Routes
 app.get('/', (req, res) => {
   res.send('Server is connected');
 });
 
-app.use('/api/auth', authRoutes);
+app.post('/create-user', async (req, res) => {
+    const { username, password, name, dietaryRestrictions, ingredients } = req.body;
+  
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+  
+      const newUser = new User({
+        username: username,
+        password: hashedPassword,  // Store the hashed password
+        name: name,
+        dietaryRestrictions: dietaryRestrictions,
+        ingredients: ingredients
+      });
+  
+      const savedUser = await newUser.save();
+      console.log("User created successfully:", savedUser);
+      res.status(201).json({ message: 'User created successfully', user: savedUser });
+    } catch (err) {
+      console.error("Error creating user:", err);
+      res.status(500).json({ message: 'Error creating user', error: err });
+    }
+  });  
+
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const user = await User.findOne({ username });
+        if (!user) return res.status(400).json({ error: 'Invalid credentials' });
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
+
+        const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: '1h' });
+        res.json({ token });
+    } catch (err) {
+        res.status(500).json({ error: 'Login failed', details: err.message });
+    }
+});
 
 // Example endpoint for recipes
 app.get('/recipes', async (req, res) => {
