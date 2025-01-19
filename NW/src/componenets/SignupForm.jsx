@@ -33,6 +33,7 @@ const SignupForm = () => {
         const result = await response.json();
         console.log(result.message);
         alert("Signup successful!");
+        //window.location.href = "/preferences";
       } else {
         console.error("Failed to signup:", response.statusText);
         alert("Error during signup. Please try again.");

@@ -43,6 +43,9 @@ const Navbar = () => {
             <Link to="/recipes" className="cursor-pointer hover:text-gray-400">
               Recipes
             </Link>
+            <Link to="/preferences" className="cursor-pointer hover:text-gray-400">
+              Preferences
+            </Link>
           </ul>
           <button
             onClick={() => setShowSignupForm(true)}
