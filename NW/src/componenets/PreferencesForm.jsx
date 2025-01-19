@@ -104,7 +104,7 @@ const PreferencesForm = () => {
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col space-y-2 mb-8">
           {/* Vegetarian Checkbox */}
-          <label htmlFor="diet">Pick your diet:</label>
+          <label htmlFor="diet"><strong>Pick your diet:</strong></label>
             <select
               id="diet"
               name="diet"
@@ -118,7 +118,7 @@ const PreferencesForm = () => {
 
         </div>
         <div className="flex flex-col items-start space-y-2 mb-8">
-          <label htmlFor="cuisines">Select your favourite cuisines:</label>
+          <label htmlFor="cuisines"><strong>Select your favourite cuisines:</strong></label>
           <select
             id="cuisines"
             name="cuisines"
@@ -134,7 +134,7 @@ const PreferencesForm = () => {
           </select>
         </div>
         <div className="flex flex-col items-start space-y-2 mb-8">
-          <label htmlFor="utensils">Select your kitchen utensils:</label>
+          <label htmlFor="utensils"><strong>Select your kitchen utensils:</strong></label>
           <select
             id="utensils"
             name="utensils"
@@ -152,7 +152,7 @@ const PreferencesForm = () => {
           </select>
         </div>
         <div className="flex flex-col items-start space-y-2 mb-8">
-          <label htmlFor="ingredients">Select the ingredients you have in your fridge:</label>
+          <label htmlFor="ingredients"><strong>Select the ingredients you have in your fridge:</strong></label>
           <select
             id="ingredients"
             name="ingredients"
@@ -199,7 +199,7 @@ const PreferencesForm = () => {
           </select>
         </div>
         <div className=" items-center ">
-          <button type="submit" style={{ padding: "10px 15px", cursor: "pointer" }}>
+          <button type="submit" className="bg-gray-500 text-white px-6 py-2 rounded-full mb-8">
             Save
           </button>
         </div>

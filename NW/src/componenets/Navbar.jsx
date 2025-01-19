@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
+import logo from '../assets/logo.png';
 import SignupForm from "./SignupForm";
 import LoginForm from "./LoginForm";
 
@@ -23,18 +24,15 @@ const Navbar = () => {
   return (
     <div>
       {/* Fixed Rectangle Container at the Top */}
-      <div className="fixed top-0 left-0 w-full bg-gray-100 shadow-md border-b border-gray-200 z-50">
+      <div className="fixed top-0 left-0 w-full bg-black shadow-md border-b border-gray-200 z-50">
         <div className="container mx-auto flex justify-between items-center py-4 px-6 md:px-20 lg:px-32">
-          <img src={assets.logo} alt="Logo" className="w-auto max-w-xs h-20" />
-          <ul className="hidden md:flex gap-7 text-gray-800 font-medium">
+          <img src={logo} alt="Logo" className="w-20 h-17"/>
+          <ul className="hidden md:flex gap-7 text-gray-100 font-medium pl-4 pr-4">
             <a href="/" className="cursor-pointer hover:text-gray-400">
               Home
             </a>
             <a href="#About" className="cursor-pointer hover:text-gray-400">
               About
-            </a>
-            <a href="#Projects" className="cursor-pointer hover:text-gray-400">
-              Projects
             </a>
             <Link to="/testimonials" className="cursor-pointer hover:text-gray-400">
               Testimonials
@@ -49,13 +47,13 @@ const Navbar = () => {
           <div className="hidden md:flex gap-4">
             <button
               onClick={() => setShowLoginForm(true)}
-              className="bg-gray-500 text-white px-6 py-2 rounded-full"
+              className="bg-gray-500 text-white px-6 py-2 rounded-full whitespace-nowrap"
             >
               Log in
             </button>
             <button
               onClick={() => setShowSignupForm(true)}
-              className="bg-blue-500 text-white px-6 py-2 rounded-full"
+              className="bg-blue-500 text-white px-6 py-2 rounded-full whitespace-nowrap"
             >
               Sign up
             </button>
@@ -99,13 +97,6 @@ const Navbar = () => {
               className="px-4 py-2 rounded-full inline-block"
             >
               About
-            </a>
-            <a
-              onClick={() => setShowMobileMenu(false)}
-              href="#Projects"
-              className="px-4 py-2 rounded-full inline-block"
-            >
-              Projects
             </a>
             <a
               onClick={() => setShowMobileMenu(false)}
