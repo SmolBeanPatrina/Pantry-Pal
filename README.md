@@ -1,18 +1,29 @@
-# nwHacks2025 project : PantryPal
+# Pantry Pal
 
-## Inspiration
-As college students who are just beginning to live and cook independently, one of our biggest struggles (and we’re sure many others can relate!) is figuring out what to make with the random assortment of ingredients left in the fridge. More often than not, we end up grocery shopping on a whim without planning ahead, only to watch in disappointment as once-fresh produce turns into fridge casualties a week later...
+Do you ever have a few remaining groceries but aren't quite sure what to do with them? Well our website is perfect for you!
+You can input the groceries that you have in our website and it'll find some curated recipes for you using the Spoonacular API. 
+It has over 5000 recipes, and will suggest customized recipes tailored perfectly to the user's needs and preferences. 
+Even if you don't have leftover groceries, it can help you find new recipes for your everyday life when you just don't know what to cook for the day. It's just like a personal kitchen assistant!
 
-This relatable frustration became our main source of inspiration. We wanted to solve this all-too-common problem and make cooking not just easier but more intentional and fun.
+## Tech Stack
 
-## What it does
-Our website is like a personal kitchen assistant! It takes in user information such as cuisine preferences, available cooking utensils, dietary restrictions, and of course - the ingredients the users have sitting in the fridge. The app then connects to Spoonacular - a food api with more than 5000 recipes and 2600 ingredient information, and it suggests customized recipes tailored perfectly to the user's needs and preferences. No more wasted ingredients, no more decision fatigue.
+### [Frontend](NW)
+- **React**
+- **Typescript**
 
-## How we built it
-We worked with the MERN stack for this project. We utilised MongoDB for storing and managing user login information, Express.js to simplify server-side code with middleware and routing capabilities, React.js for the frontend where we build an interactive, easy to use and visually appealing UI, and Node.js as the runtime environment for executing server-side code.
+### [Backend](backend)
+- **Node.js** 
+- **Express.js**
+- **MongoDB (via locally run Mongoose)**
+- **Spoonacular API**
 
-## Challenges we ran into
-Most of us had only worked with JavaScript very few times before, so refreshing those concepts within a 24 hour period was quite the task. Especially when it came to establishing an end-to-end connection from the API to the React frontend, we kept running into server side errors that took us hours to debug. Every error led us to gain a more comprehensive understanding of the task we were dealing with!
+## How it works
 
-## Accomplishments that we're proud of
-This was our first time working with the complete MERN stack, and the fact that we had at least gotten the user sign-in and the user data management to work using MongoDB is an accomplishment that we are truly proud of. The 24 hour timeline also allowed us to be productively efficient, allowing us ample time to deal with errors and not have to rush through anything!
+1. The user answers a few questions in a form and the answers are sent to the backend.
+2. The backend calls stores the responses in the database and returns a few recipes based on the form's response.
+3. The user can read through the returned recipes and click the embedded links directly to the recipe's original website.
+
+## Additional Information
+This project was created for the hackathon nwHacks 2025 and can be viewed on [Devpost](https://devpost.com/software/pantry-pal-mntkpi). 
+This project is a fork of the [original github](https://github.com/floorence/nwHacks2025) for additional changes post-hackathon and the original README.me can be found [here](Original_README.md).
+Originally developed by Patrina Cheung, Florence Shen, Rajrupa Sanyal, and Ahmed Khan on January 18-19 2025.
