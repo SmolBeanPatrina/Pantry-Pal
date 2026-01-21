@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./TableOfContents.css";
+import "./tableofcontents.css";
 
 const TableOfContents = ({ sections }) => {
   const [isOpen, setIsOpen] = useState(false);
