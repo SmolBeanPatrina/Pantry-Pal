@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import RecipePage from './recipepage';
+import RecipePage from './recipePage';
 import Header from './componenets/Header';
 import Testimonials from './componenets/Testimonials';
 import Preferences from './componenets/PreferencesForm';
