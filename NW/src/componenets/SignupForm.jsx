@@ -23,7 +23,7 @@ const SignupForm = ({ onSwitchToLogin }) => {
     try {
       // Send the form data to the backend
       console.log(formData);
-      const response = await fetch("http://localhost:4000/create-user", {  // Make sure the endpoint matches the backend route
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/create-user`, {  // Make sure the endpoint matches the backend route
         method: "POST",
         headers: {
           "Content-Type": "application/json",

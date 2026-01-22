@@ -13,8 +13,8 @@ const LoginForm = ({ onClose }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
-    const response = await fetch("http://localhost:4000/login", {
+
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
