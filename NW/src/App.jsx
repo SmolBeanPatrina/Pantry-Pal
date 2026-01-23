@@ -3,7 +3,7 @@ import RecipePage from './recipePage';
 import Header from './componenets/Header';
 import Testimonials from './componenets/Testimonials';
 import Preferences from './componenets/PreferencesForm';
-import AboutPage from './componenets/About';
+import About from './componenets/About';
 import Contact from './componenets/Contact';
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
             <Route path="/recipes" element={<RecipePage />} />
             <Route path="/Testimonials" element={<Testimonials />} />
             <Route path="/preferences" element={<Preferences />} />
-            <Route path="/about" element={<AboutPage />} />
+            <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact/>}/>
           </Routes>
         </main>
