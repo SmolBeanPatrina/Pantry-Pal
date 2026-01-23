@@ -53,7 +53,7 @@ const PreferencesForm = () => {
     console.log("Form Data Sent to API:", formData); // Log data being sent to the backend
   
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/preferences`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/preferences`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

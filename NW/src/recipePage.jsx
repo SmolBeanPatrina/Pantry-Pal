@@ -16,7 +16,7 @@ const RecipePage = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/recipes?username=${username}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/recipes?username=${username}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
