@@ -12,10 +12,6 @@ const User = require('./models/user'); // Ensure this is correctly defined in yo
 dotenv.config();
 
 const app = express();
-app.use(cors({
-  origin: "https://pantry-ob27hwtjv-smolbeanpatrinas-projects.vercel.app",
-  credentials: true
-}));
 const PORT = process.env.PORT || 5000;
 const mongoURI = process.env.MONGO_URI;
 const SECRET_KEY = process.env.SECRET_KEY || "defaultSecretKey"; // Fallback for SECRET_KEY
@@ -27,7 +23,26 @@ mongoose
   .catch((err) => console.error("Failed to connect to MongoDB", err));
 
 // Middleware
-app.use(cors({ origin: 'http://localhost:5173', credentials: true })); // Allow only your frontend origin
+import cors from "cors";
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://pantry-ob27hwtjv-smolbeanpatrinas-projects.vercel.app"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (like Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 app.use(bodyParser.json()); // Parse incoming JSON requests
 
 // Routes
