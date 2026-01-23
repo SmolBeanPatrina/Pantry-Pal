@@ -23,7 +23,6 @@ mongoose
   .catch((err) => console.error("Failed to connect to MongoDB", err));
 
 // Middleware
-import cors from "cors";
 
 const allowedOrigins = [
   "http://localhost:5173",
