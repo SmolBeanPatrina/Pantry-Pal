@@ -26,7 +26,7 @@ mongoose
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://pantry-ob27hwtjv-smolbeanpatrinas-projects.vercel.app"
+  "https://pantry-pal-lemon.vercel.app"
 ];
 
 app.use(cors({
