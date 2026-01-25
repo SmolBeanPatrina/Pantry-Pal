@@ -31,8 +31,8 @@ const LoginForm = ({ onClose }) => {
       // Store the username and token (JWT)
       localStorage.setItem("username", loginData.username);
       localStorage.setItem("token", token);
-      window.location.reload();
       alert("Login successful!");
+      window.location.href = "/preferences";
       onClose();
     } else {
       alert("Invalid username or password.");
