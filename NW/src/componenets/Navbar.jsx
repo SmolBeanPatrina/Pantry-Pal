@@ -25,7 +25,9 @@ const Navbar = () => {
 
   const handleSignout = () => {
     setUser(null); // Clear user state on signout
+    localStorage.removeItem("username");
     alert("Signed out successfully.");
+    location.reload();
   };
 
   return (
@@ -51,7 +53,7 @@ const Navbar = () => {
               Preferences
             </Link>
           </ul>
-          <div className="hidden md:flex gap-4">
+          {localStorage.getItem('username') == null && (<div className="hidden md:flex gap-4">
             <button
               onClick={() => setShowLoginForm(true)}
               className="bg-gray-500 text-white px-6 py-2 rounded-full whitespace-nowrap"
@@ -64,7 +66,16 @@ const Navbar = () => {
             >
               Sign up
             </button>
-          </div>
+          </div>)}
+
+          {localStorage.getItem('username') != null && (<div className="hidden md:flex gap-4">
+            <button
+              onClick={() => handleSignout()}
+              className="bg-gray-500 text-white px-6 py-2 rounded-full whitespace-nowrap"
+            >
+              Log Out
+            </button>
+            </div>)}
           <img
             onClick={() => setShowMobileMenu(true)}
             src={assets.menu_icon}
