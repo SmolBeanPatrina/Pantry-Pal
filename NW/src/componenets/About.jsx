@@ -13,6 +13,8 @@ const About = () => {
                 more guessing what to make! Simply input your details, and we'll find the perfect 
                 recipe for you. Enjoy cooking with ease, knowing that each dish is customized just 
                 for you!
+
+                If you're curious about the development of PantryPal, see our <a href="https://github.com/SmolBeanPatrina/Pantry-Pal">github repo</a>
             </p>
         </div>
     );
