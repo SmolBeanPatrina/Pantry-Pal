@@ -46,12 +46,6 @@ const Navbar = () => {
             <Link to="/testimonials" className="cursor-pointer hover:text-gray-400">
               Testimonials
             </Link>
-            <Link to="/recipes" className="cursor-pointer hover:text-gray-400">
-              Recipes
-            </Link>
-            <Link to="/preferences" className="cursor-pointer hover:text-gray-400">
-              Preferences
-            </Link>
           </ul>
           {localStorage.getItem('username') == null && (<div className="hidden md:flex gap-4">
             <button
