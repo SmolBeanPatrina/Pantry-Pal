@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Navbar from "./Navbar";
 
 const PreferencesForm = () => {
+
+  const MAX_INGREDIENTS = 5;
+
   const [formData, setFormData] = useState({
     diet: "omnivore",
     cuisine: "",
@@ -12,14 +15,19 @@ const PreferencesForm = () => {
   const handleCheckboxChange = (e, key) => {
     const { value, checked } = e.target;
 
-    setFormData((prevFormData) => {
-      const updatedArray = checked
-        ? [...prevFormData[key], value] // Add value if checked
-        : prevFormData[key].filter((item) => item !== value); // Remove value if unchecked
+    setFormData((prev) => {
+      const currentSelections = prev[key];
+
+      // If trying to add but already at max → block
+      if (checked && currentSelections.length >= MAX_INGREDIENTS) {
+        return prev;
+      }
 
       return {
-        ...prevFormData,
-        [key]: updatedArray,
+        ...prev,
+        [key]: checked
+          ? [...currentSelections, value]
+          : currentSelections.filter((item) => item !== value),
       };
     });
   };
@@ -32,12 +40,9 @@ const PreferencesForm = () => {
   };
 
   const handleCuisineChange = (e) => {
-    const { value } = e.target;
-
-    console.log(`Cuisine selected: ${value}`); // Debugging log
     setFormData({
       ...formData,
-      cuisine: value, // Correctly update the cuisine field
+      cuisine: e.target.value,
     });
   };
 
@@ -106,61 +111,62 @@ const PreferencesForm = () => {
 
         {/* Cuisines */}
         <div className="flex flex-col space-y-2 mb-8">
-          <label>
-            <strong>Select your favourite cuisine:</strong>
+          <label htmlFor="cuisine">
+            <strong>Pick your Cusine:</strong>
           </label>
-          {["Italian", "Chinese", "Indian", "Mexican"].map((cuisine) => (
-            <label key={cuisine}>
-              <input
-                type="radio"
-                name="cuisine"
-                value={cuisine.toLowerCase()}
-                checked={formData.cuisine === cuisine.toLowerCase()}
-                onChange={handleCuisineChange}
-              />
-              {cuisine}
-            </label>
-          ))}
-            </div>
-
-        {/* Utensils */ }
-            < div className = "flex flex-col space-y-2 mb-8" >
-            <label>
-              <strong>Select your kitchen utensils:</strong>
-            </label>
-          {
-              ["Knife", "Spatula", "Mixing Bowl", "Whisk", "Grater", "Peeler"].map(
-                (utensil) => (
-                  <label key={utensil}>
-                    <input
-                      type="checkbox"
-                      value={utensil.toLowerCase().replace(" ", "_")}
-                      checked={formData.utensils.includes(
-                        utensil.toLowerCase().replace(" ", "_")
-                      )}
-                      onChange={(e) => handleCheckboxChange(e, "utensils")}
-                    />
-                    {utensil}
-                  </label>
-                )
-              )
-            }
+          <select
+            id="cuisine"
+            name="cuisine"
+            value={formData.cuisine}
+            onChange={handleCuisineChange}
+          >
+            <option value="African">African</option>
+            <option value="American">American</option>
+            <option value="Asian">Asian</option>
+            <option value="British">British</option>
+            <option value="Cajun">Cajun</option>
+            <option value="Caribbean">Caribbean</option>
+            <option value="Chinese">Chinese</option>
+            <option value="Eastern European">Eastern European</option>
+            <option value="French">French</option>
+            <option value="German">German</option>
+            <option value="Greek">Greek</option>
+            <option value="Indian">Indian</option>
+            <option value="Irish">Irish</option>
+            <option value="Italian">Italian</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Jewish">Jewish</option>
+            <option value="Korean">Korean</option>
+            <option value="Latin American">Latin American</option>
+            <option value="Mediterranean">Mediterranean</option>
+            <option value="Mexican">Mexican</option>
+            <option value="Middle Eastern">Middle Eastern</option>
+            <option value="Nordic">Nordic</option>
+            <option value="Southern">Southern</option>
+            <option value="Spanish">Spanish</option>
+            <option value="Thai">Thai</option>
+            <option value="Vietnamese">Vietnamese</option>
+          </select>
         </div>
 
         {/* Ingredients */}
         <div className="flex flex-col space-y-2 mb-8">
           <label>
-            <strong>Select the ingredients you have in your fridge:</strong>
+            <strong>Select the ingredients you have in your fridge: (MAX 5)</strong>
           </label>
           {[
-            "Salt",
-            "Pepper",
-            "Tomato",
-            "Garlic",
-            "Cheese",
-            "Chicken",
             "Rice",
-            "Basil",
+            "Onion",
+            "Spinach",
+            "Chicken",
+            "Tortilla",
+            "Bread",
+            "Cheese",
+            "Tomato",
+            "Potato",
+            "Egg",
+            "Milk",
+            "Yogurt"
           ].map((ingredient) => (
             <label key={ingredient}>
               <input
@@ -169,6 +175,11 @@ const PreferencesForm = () => {
                 checked={formData.ingredients.includes(
                   ingredient.toLowerCase().replace(" ", "_")
                 )}
+                disabled={
+                  !formData.ingredients.includes(
+                    ingredient.toLowerCase().replace(" ", "_")
+                  ) && formData.ingredients.length >= MAX_INGREDIENTS
+                }
                 onChange={(e) => handleCheckboxChange(e, "ingredients")}
               />
               {ingredient}
@@ -181,9 +192,9 @@ const PreferencesForm = () => {
           <button
             type="submit"
             className="bg-gray-500 text-white px-6 py-2 rounded-full mb-8"
-            onClick={() => console.log(formData)}
+            onClick={() => window.location.href = "/recipes"}
           >
-            Save
+            Generate
           </button>
         </div>
       </form>
