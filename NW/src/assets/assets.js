@@ -105,6 +105,6 @@ export const projectsData = [
       image: profile_img_4,
       alt: "Portrait of Florence Shen ",
       rating: 5,
-      text: "I am delighted with the excellet and easy recipes generated, it has been a great help to me and my family."
+      text: "I am delighted with the excellent and easy recipes generated, it has been a great help to me and my family."
   }
 ];
