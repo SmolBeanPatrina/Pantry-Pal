@@ -2,46 +2,36 @@ import React, { useState, useEffect } from "react";
 import TableOfContents from "./tableofcontents";
 import Section from "./sections";
 import Navbar from "./componenets/Navbar";
+import { useNavigate } from "react-router-dom";
 
 const RecipePage = () => {
   const [recipesData, setRecipes] = useState({ recipes: [] });
+  const username = localStorage.getItem("username");
+  const navigate = useNavigate();
 
-  const getRecipes = async (e) => {
-    e.preventDefault();
-
-    const username = localStorage.getItem("username");
-    if (!username) {
-      alert("Please log in first.");
-      return;
-    }
-
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/recipes?username=${username}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log(result); // Log the result for debugging
-
-        // Update the state with the recipes data from the backend
-        setRecipes({
-          recipes: result.recipes || [], // Ensure it's an empty array if no recipes are found
-        });
-
-        alert("Got recipes!");
-      } else {
-        console.error("Failed to get recipes:", response.statusText);
-        alert("Error getting recipes. Please try again.");
+  useEffect(() => {
+  const fetchRecipes = async () => {
+      if (!username) {
+        alert("Please log in first.");
+        return;
       }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("An error occurred. Please check your network connection.");
-    }
-  };
+
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/recipes?username=${username}`
+        );
+
+        const result = await response.json();
+
+        setRecipes({ recipes: result.recipes || [] });
+      } catch (error) {
+        console.error("Error fetching recipes:", error);
+        setRecipes({ recipes: [] });
+      }
+    };
+
+    fetchRecipes();
+  }, [username]); // ✅ only runs on page entry
 
   const convertToReadable = (string) => {
     const decodedDiv = document.createElement("div");
@@ -54,18 +44,18 @@ const RecipePage = () => {
     return image;
   };
 
-  useEffect(() => {
-    console.log(recipesData); // This will log when the recipes data state is updated
-  }, [recipesData]);
+  // useEffect(() => {
+  //   console.log(recipesData); // This will log when the recipes data state is updated
+  // }, [recipesData]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <Navbar />
       <button
-        onClick={getRecipes}
+        onClick={() => navigate("/preferences")}
         className="mt-16 mb-8 bg-red-500 text-white px-4 py-2 rounded-full"
       >
-        Generate Recipes
+        New Search
       </button>
 
       <div className="w-full max-w-4xl px-4">

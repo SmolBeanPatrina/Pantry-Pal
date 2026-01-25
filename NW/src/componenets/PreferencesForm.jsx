@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
 
 const PreferencesForm = () => {
 
   const MAX_INGREDIENTS = 5;
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     diet: "omnivore",
@@ -73,6 +75,7 @@ const PreferencesForm = () => {
         const result = await response.json();
         console.log(result.message);
         alert("Preferences Updated!");
+        navigate("/recipes");
       } else {
         console.error("Failed to update preferences:", response.statusText);
         alert("Error during preferences selection. Please try again.");
@@ -192,7 +195,6 @@ const PreferencesForm = () => {
           <button
             type="submit"
             className="bg-gray-500 text-white px-6 py-2 rounded-full mb-8"
-            onClick={() => window.location.href = "/recipes"}
           >
             Generate
           </button>
